@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { label: 'Product', href: '#product' },
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Security', href: '#security' },
+  { label: 'New Page', href: '/v2' },
 ];
 
 const ThemeToggle = () => {

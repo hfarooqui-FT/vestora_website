@@ -1,25 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import { 
-  ArrowRight, 
-  BarChart3, 
-  Shield, 
-  Globe, 
-  Zap, 
-  Menu, 
-  X, 
+import {
+  ArrowRight,
+  BarChart3,
+  Shield,
+  Zap,
   ChevronRight,
   TrendingUp,
   Building2,
   Lock,
-  Moon,
-  Sun,
   Plane,
   Building,
   Wifi,
   Ship,
   Droplet
 } from 'lucide-react';
+import Navbar from '../Assets /Navbar';
+import Footer from '../Assets /Footer';
 import { BarChart, Bar, Tooltip, ResponsiveContainer } from 'recharts';
 
 const mockChartData = [
@@ -64,50 +61,6 @@ function calcInvestedEOSB(monthlySalary: number, totalMonths: number, annualRate
 }
 
 // --- Components ---
-
-const ThemeToggle = () => {
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    if (document.documentElement.classList.contains('dark')) {
-      setIsDark(true);
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    if (isDark) {
-      document.documentElement.classList.remove('dark');
-      setIsDark(false);
-    } else {
-      document.documentElement.classList.add('dark');
-      setIsDark(true);
-    }
-  };
-
-  return (
-    <motion.button 
-      whileHover={{ scale: 1.1, rotate: 15 }}
-      whileTap={{ scale: 0.9 }}
-      onClick={toggleTheme}
-      className="group relative p-2 rounded-full text-vestora-charcoal/80 hover:text-vestora-forest hover:bg-vestora-sage/10 transition-colors dark:text-vestora-neutral/80 dark:hover:text-vestora-growth dark:hover:bg-vestora-sage/20"
-      aria-label="Toggle Dark Mode"
-    >
-      {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-      <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-vestora-charcoal dark:bg-vestora-neutral px-2 py-1 text-xs text-white dark:text-vestora-charcoal opacity-0 transition-opacity group-hover:opacity-100 pointer-events-none z-50">
-        Toggle Dark Mode
-      </span>
-    </motion.button>
-  );
-};
-
-const Logo = ({ className = "" }: { className?: string }) => (
-  <motion.div 
-    whileHover={{ scale: 1.05 }}
-    className={`flex items-center cursor-pointer ${className}`}
-  >
-    <img src="/logo.png" alt="Vestora" className="h-10 w-auto object-contain translate-y-1" />
-  </motion.div>
-);
 
 const Button = ({ 
   children, 
@@ -604,146 +557,6 @@ const EOSCalculator = () => {
   );
 };
 
-// --- Sections ---
-
-const NAV_LINKS = [
-  { label: 'Calculator', href: '#calculator' },
-  { label: 'Product', href: '#product' },
-  { label: 'How It Works', href: '#how-it-works' },
-  { label: 'Security', href: '#security' },
-];
-
-const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.classList.add('overflow-hidden');
-    } else {
-      document.body.classList.remove('overflow-hidden');
-    }
-    return () => document.body.classList.remove('overflow-hidden');
-  }, [mobileMenuOpen]);
-
-  return (
-    <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-vestora-white/80 dark:bg-[#0B120E]/80 backdrop-blur-md border-b border-vestora-sage/20 py-4' : 'bg-transparent py-6'}`}>
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <Logo />
-        
-        <div className="hidden md:flex items-center gap-8">
-          {/* Desktop Navigation */}
-          <nav className="flex items-center gap-8">
-            {NAV_LINKS.map((item) => (
-              <motion.a
-                key={item.label}
-                href={item.href}
-                whileHover={{ scale: 1.05, y: -2 }}
-                className="text-sm font-medium text-vestora-charcoal/80 hover:text-vestora-forest dark:text-vestora-neutral/80 dark:hover:text-vestora-growth transition-colors inline-block"
-              >
-                {item.label}
-              </motion.a>
-            ))}
-          </nav>
-
-          {/* Desktop Actions */}
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            <Button variant="ghost">Sign In</Button>
-            <Button variant="primary">Get Early Access</Button>
-          </div>
-        </div>
-
-        {/* Mobile Menu Toggle */}
-        <button 
-          className="md:hidden p-2 -mr-2 text-vestora-charcoal dark:text-vestora-neutral hover:bg-vestora-sage/10 rounded-full transition-colors" 
-          onClick={() => setMobileMenuOpen(true)}
-          aria-label="Open mobile menu"
-          title="Open Menu"
-        >
-          <Menu className="w-6 h-6" />
-        </button>
-      </div>
-
-      {/* Mobile Menu Drawer */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMobileMenuOpen(false)}
-              className="fixed inset-0 bg-vestora-charcoal/40 dark:bg-black/60 backdrop-blur-sm z-50 md:hidden"
-              aria-hidden="true"
-            />
-            
-            {/* Drawer */}
-            <motion.div 
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 h-dvh w-[85vw] max-w-sm bg-vestora-white dark:bg-[#0B120E] z-50 shadow-2xl border-l border-vestora-sage/20 flex flex-col md:hidden"
-              role="dialog"
-              aria-modal="true"
-            >
-              {/* Drawer Header */}
-              <div className="px-6 py-5 flex items-center justify-between border-b border-vestora-sage/10">
-                <Logo />
-                <button 
-                  onClick={() => setMobileMenuOpen(false)} 
-                  className="group relative p-2 -mr-2 text-vestora-charcoal dark:text-vestora-neutral rounded-full hover:bg-vestora-sage/10 transition-colors"
-                  aria-label="Close mobile menu"
-                >
-                  <X className="w-6 h-6" />
-                  <span className="absolute top-full mt-2 right-0 whitespace-nowrap rounded-md bg-vestora-charcoal dark:bg-vestora-neutral px-2 py-1 text-xs text-white dark:text-vestora-charcoal opacity-0 transition-opacity group-hover:opacity-100 pointer-events-none z-50">
-                    Close Menu
-                  </span>
-                </button>
-              </div>
-              
-              {/* Drawer Content */}
-              <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-8">
-                <nav className="flex flex-col gap-6">
-                  {NAV_LINKS.map((item) => (
-                    <motion.a
-                      key={item.label}
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      whileHover={{ x: 10 }}
-                      className="text-xl font-medium text-vestora-charcoal dark:text-vestora-neutral hover:text-vestora-forest dark:hover:text-vestora-growth transition-colors inline-block"
-                    >
-                      {item.label}
-                    </motion.a>
-                  ))}
-                </nav>
-                
-                {/* Drawer Footer Actions */}
-                <div className="mt-auto flex flex-col gap-4 pt-6 border-t border-vestora-sage/10">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-sm font-medium text-vestora-sage">Theme</span>
-                    <ThemeToggle />
-                  </div>
-                  <Button variant="outline" className="w-full justify-center">Sign In</Button>
-                  <Button variant="primary" className="w-full justify-center">Get Early Access</Button>
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-    </header>
-  );
-};
-
 const Hero = () => {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 1000], [0, 200]);
@@ -1205,71 +1018,6 @@ const CTA = () => (
       </FadeIn>
     </div>
   </section>
-);
-
-const Footer = () => (
-  <footer className="bg-vestora-charcoal text-vestora-sage py-12 md:py-16 border-t border-white/10">
-    <div className="max-w-7xl mx-auto px-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 md:gap-12 mb-12 md:mb-16">
-        <div className="col-span-1 sm:col-span-2 md:col-span-4 lg:col-span-2">
-          <div className="flex items-center gap-3 mb-6">
-            <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="4" y="24" width="4" height="12" rx="2" fill="#56A861"/>
-              <rect x="12" y="16" width="4" height="20" rx="2" fill="#56A861"/>
-              <rect x="20" y="8" width="4" height="28" rx="2" fill="#56A861"/>
-              <rect x="28" y="16" width="4" height="20" rx="2" fill="#56A861"/>
-              <rect x="36" y="24" width="4" height="12" rx="2" fill="#56A861"/>
-            </svg>
-            <span className="font-bold text-lg tracking-tight text-vestora-white">VESTORA</span>
-          </div>
-          <p className="text-sm max-w-xs mb-6">
-            The UAE's first EOS investment comparison platform. Helping companies navigate end-of-service benefits with clarity.
-          </p>
-        </div>
-        
-        <div>
-          <h4 className="text-vestora-white font-semibold mb-4">Platform</h4>
-          <ul className="space-y-3 text-sm flex flex-col items-start">
-            {[['EOS Calculator', '#calculator'], ['Fund Comparison', '#platform'], ['Fund Managers', '#platform']].map(([label, href]) => (
-              <li key={label}>
-                <motion.a whileHover={{ x: 5, color: '#ffffff' }} href={href} className="hover:text-white transition-colors inline-block">{label}</motion.a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="text-vestora-white font-semibold mb-4">Company</h4>
-          <ul className="space-y-3 text-sm flex flex-col items-start">
-            {['About Us', 'Contact'].map((link) => (
-              <li key={link}>
-                <motion.a whileHover={{ x: 5, color: '#ffffff' }} href="#" className="hover:text-white transition-colors inline-block">{link}</motion.a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="text-vestora-white font-semibold mb-4">Legal</h4>
-          <ul className="space-y-3 text-sm flex flex-col items-start">
-            {['Privacy Policy', 'Terms of Service', 'Security'].map((link) => (
-              <li key={link}>
-                <motion.a whileHover={{ x: 5, color: '#ffffff' }} href="#" className="hover:text-white transition-colors inline-block">{link}</motion.a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      
-      <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
-        <p>&copy; {new Date().getFullYear()} Vestora. All rights reserved.</p>
-        <div className="flex gap-6">
-          <motion.a whileHover={{ x: 5, color: '#ffffff' }} href="#" className="hover:text-white transition-colors inline-block">Twitter</motion.a>
-          <motion.a whileHover={{ x: 5, color: '#ffffff' }} href="#" className="hover:text-white transition-colors inline-block">LinkedIn</motion.a>
-        </div>
-      </div>
-    </div>
-  </footer>
 );
 
 export default function App() {

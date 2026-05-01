@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import whiteLogo from './vestore-v1-white.svg';
+import blkLogo from './vestore-v1-blk.svg';
 
 const Footer = () => (
   <footer className="bg-vestora-charcoal text-vestora-sage py-12 md:py-16 border-t border-white/10">
@@ -8,7 +8,7 @@ const Footer = () => (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 md:gap-12 mb-12 md:mb-16">
         <div className="col-span-1 sm:col-span-2 md:col-span-4 lg:col-span-2">
           <div className="flex items-center gap-3 mb-6">
-            <img src={whiteLogo} alt="Vestora" className="h-8 w-auto" />
+            <img src={blkLogo} alt="Vestora" className="h-8 w-auto" />
           </div>
           <p className="text-sm max-w-xs mb-6">
             The UAE's first EOS investment comparison platform. Helping companies navigate end-of-service benefits with clarity.

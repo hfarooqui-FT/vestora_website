@@ -53,7 +53,7 @@ const Logo = ({ className = "" }: { className?: string }) => (
     <img
       src={whiteLogo}
       alt="Vestora"
-      className="h-10 w-auto object-contain translate-y-1 invert dark:invert-0"
+      className="h-10 w-auto object-contain translate-y-1"
     />
   </motion.div>
 );

@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-vestora-forest: #0B422B;
+  --color-vestora-neutral: #F8FAF9;
+  --color-vestora-charcoal: #1C2520;
+  --color-vestora-sage: #8CA095;
+  --color-vestora-growth: #56A861;
+  --color-vestora-white: #FFFFFF;
+  
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-vestora-neutral text-vestora-charcoal font-sans antialiased selection:bg-vestora-growth/30;
+  }
+}
+
+@layer utilities {
+  .shadow-vestora {
+    box-shadow: 0 12px 24px -8px rgba(11, 66, 43, 0.08), 0 4px 8px -4px rgba(11, 66, 43, 0.04);
+  }
+  .shadow-vestora-sm {
+    box-shadow: 0 4px 12px -4px rgba(11, 66, 43, 0.06);
+  }
+}

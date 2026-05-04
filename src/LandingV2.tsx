@@ -16,7 +16,9 @@ import {
   Droplet,
   Users,
   DollarSign,
-  FileText
+  FileText,
+  X,
+  CheckCircle
 } from 'lucide-react';
 import Navbar from '../Assets /Navbar';
 import Footer from '../Assets /Footer';
@@ -1019,25 +1021,112 @@ const SecuritySection = () => (
   </section>
 );
 
-const CTA = () => (
-  <section className="py-16 md:py-32 bg-vestora-white dark:bg-[#0B120E] border-t border-vestora-sage/20 transition-colors duration-300 relative overflow-hidden" id="cta">
-    <FloatingParticles />
-    <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-      <FadeIn>
-        <h2 className="text-3xl md:text-6xl font-bold text-vestora-charcoal dark:text-vestora-neutral tracking-tight mb-6 md:mb-8">
-          Mandatory EOS Investment Is Coming. Are You Ready?
-        </h2>
-        <p className="text-xl text-vestora-charcoal/70 dark:text-vestora-neutral/70 mb-10">
-          UAE Cabinet Resolution 96/2023 is changing how companies handle end-of-service benefits. Get ahead of the deadline - calculate your liability and compare funds today.
-        </p>
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Button variant="primary" icon className="py-4 px-8 text-lg" onClick={() => document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })}>Calculate Your EOS Liability - Free</Button>
-          <Button variant="outline" className="py-4 px-8 text-lg">Book a Demo</Button>
+const CTA = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({ name: '', company: '', email: '' });
+  const [errors, setErrors] = useState({ name: '', email: '' });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const newErrors = { name: '', email: '' };
+    if (!form.name.trim()) newErrors.name = 'Required';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) newErrors.email = 'Enter a valid email';
+    if (newErrors.name || newErrors.email) { setErrors(newErrors); return; }
+    setSubmitted(true);
+  };
+
+  const closeModal = () => { setShowModal(false); setSubmitted(false); setForm({ name: '', company: '', email: '' }); setErrors({ name: '', email: '' }); };
+
+  const inputClass = "w-full px-4 py-3 rounded-xl border border-vestora-sage/30 bg-vestora-neutral dark:bg-[#15201A] text-vestora-charcoal dark:text-vestora-neutral text-sm focus:outline-none focus:border-vestora-forest dark:focus:border-vestora-growth";
+
+  return (
+    <>
+      <section id="cta" className="py-16 md:py-32 bg-vestora-white dark:bg-[#0B120E] border-t border-vestora-sage/20 transition-colors duration-300 relative overflow-hidden">
+        <FloatingParticles />
+        <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
+          <FadeIn>
+            <h2 className="text-3xl md:text-6xl font-bold text-vestora-charcoal dark:text-vestora-neutral tracking-tight mb-6 md:mb-8">
+              Mandatory EOS Investment Is Coming. Are You Ready?
+            </h2>
+            <p className="text-xl text-vestora-charcoal/70 dark:text-vestora-neutral/70 mb-10">
+              UAE Cabinet Resolution 96/2023 is changing how companies handle end-of-service benefits. Get ahead of the deadline - calculate your liability and compare funds today.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <Button variant="primary" icon className="py-4 px-8 text-lg" onClick={() => setShowModal(true)}>Get Started</Button>
+              <Button variant="outline" className="py-4 px-8 text-lg" onClick={() => setShowModal(true)}>Book a Demo</Button>
+            </div>
+          </FadeIn>
         </div>
-      </FadeIn>
-    </div>
-  </section>
-);
+      </section>
+
+      <AnimatePresence>
+        {showModal && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeModal}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+            />
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                className="bg-vestora-white dark:bg-[#0B120E] rounded-2xl border border-vestora-sage/20 shadow-2xl w-full max-w-md pointer-events-auto relative"
+              >
+                <button onClick={closeModal} className="absolute top-4 right-4 p-1.5 rounded-full text-vestora-sage hover:text-vestora-charcoal dark:hover:text-vestora-neutral hover:bg-vestora-sage/10 transition-colors">
+                  <X className="w-4 h-4" />
+                </button>
+
+                {!submitted ? (
+                  <div className="p-8">
+                    <h3 className="text-xl font-bold text-vestora-charcoal dark:text-vestora-neutral mb-1">Get Started with Vestora</h3>
+                    <p className="text-sm text-vestora-sage mb-6">A member of our team will reach out within 24 hours.</p>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      <div>
+                        <input type="text" placeholder="Your name" value={form.name}
+                          onChange={e => { setForm(f => ({ ...f, name: e.target.value })); setErrors(er => ({ ...er, name: '' })); }}
+                          className={inputClass} />
+                        {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
+                      </div>
+                      <div>
+                        <input type="text" placeholder="Company name" value={form.company}
+                          onChange={e => setForm(f => ({ ...f, company: e.target.value }))}
+                          className={inputClass} />
+                      </div>
+                      <div>
+                        <input type="email" placeholder="Work email" value={form.email}
+                          onChange={e => { setForm(f => ({ ...f, email: e.target.value })); setErrors(er => ({ ...er, email: '' })); }}
+                          className={inputClass} />
+                        {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
+                      </div>
+                      <Button variant="primary" className="w-full justify-center mt-2">Request Access</Button>
+                    </form>
+                  </div>
+                ) : (
+                  <div className="p-8 text-center">
+                    <div className="w-12 h-12 rounded-full bg-vestora-growth/15 flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle className="w-6 h-6 text-vestora-growth" />
+                    </div>
+                    <h3 className="text-xl font-bold text-vestora-charcoal dark:text-vestora-neutral mb-2">You're on the list.</h3>
+                    <p className="text-sm text-vestora-sage mb-6">We'll be in touch within 24 hours.</p>
+                    <a href="#" className="text-sm font-semibold text-vestora-forest dark:text-vestora-growth hover:underline inline-flex items-center gap-1">
+                      Or book a time directly <ArrowRight className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                )}
+              </motion.div>
+            </div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
+  );
+};
 
 export default function LandingV2() {
   return (

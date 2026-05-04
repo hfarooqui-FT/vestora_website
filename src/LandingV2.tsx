@@ -254,7 +254,7 @@ const EOSCalculator = () => {
               EOS Liability Calculator
             </div>
             <h2 className="text-3xl md:text-5xl font-bold text-vestora-charcoal dark:text-vestora-neutral tracking-tight mb-4">
-              See What You Owe— or What You're Owed.
+              See What You Owe - or What You're Owed.
             </h2>
             <p className="text-lg text-vestora-charcoal/70 dark:text-vestora-neutral/70 max-w-2xl mx-auto">
               Calculate end-of-service benefits using the UAE Labour Law formula. Free, instant, no signup required.
@@ -555,7 +555,8 @@ const Hero = () => {
           </FadeIn>
           <FadeIn delay={0.2} immediate>
             <p className="text-base sm:text-lg text-vestora-charcoal/70 dark:text-vestora-neutral/70 mb-10 leading-relaxed max-w-xl">
-              Evolving UAE regulations push companies to invest employee end-of-service benefits in regulated funds. Vestora lets you calculate your liability, compare all SCA-approved funds side by side, and connect with fund managers - in one place.
+              Evolving UAE regulations push companies to invest employee end-of-service benefits in regulated funds. 
+              Vestora lets you calculate your liability, compare all SCA-approved funds side by side, and connect with fund managers.
             </p>
           </FadeIn>
           <FadeIn delay={0.3} immediate className="flex flex-col sm:flex-row gap-4">

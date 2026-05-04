@@ -704,10 +704,10 @@ const HRTalentSection = () => (
             For HR & Talent
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-vestora-charcoal dark:text-vestora-neutral tracking-tight mb-6 leading-tight">
-            The money was always your employees'. Now it can grow.
+            Convert EOSB liabilities into funded, employee-owned investments.
           </h2>
           <p className="text-lg text-vestora-charcoal/70 dark:text-vestora-neutral/70 leading-relaxed mb-8">
-            Stop handing employees a flat payout at the end of their time with you. With Vestora, every dirham of their EOSB is invested and growing from day one — no extra budget, no added complexity on your end.
+            Stop handing employees a flat payout at the end of their time with you. With Vestora, every dirham of their EOSB is invested and growing from day one - no extra budget, no added complexity on your end.
           </p>
           <Button variant="primary" icon onClick={() => document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })}>
             See the Difference
@@ -842,7 +842,7 @@ const FinanceTeamsSection = () => {
             What actually changes on your books.
           </h2>
           <p className="text-lg text-vestora-charcoal/70 dark:text-vestora-neutral/70 leading-relaxed max-w-3xl mb-14">
-            Vestora handles the full accounting translation — moving EOS liabilities from an accrual on your balance sheet to a managed fund obligation. Your auditors will have everything they need from day one.
+            Vestora handles the full accounting translation - moving EOS liabilities from an accrual on your balance sheet to a managed fund obligation. Your auditors will have everything they need from day one.
           </p>
         </FadeIn>
 
@@ -872,7 +872,7 @@ const HowItWorks = () => {
     {
       num: "1",
       title: "Calculate",
-      desc: "Upload your employee CSV. Get your total EOS liability in 60 seconds, broken down by tenure, with 5-year growth projections."
+      desc: "Upload your employee CSV. Get your total EOS liability in 60 seconds, with 5-year growth projections."
     },
     {
       num: "2",
@@ -882,7 +882,7 @@ const HowItWorks = () => {
     {
       num: "3",
       title: "Connect",
-      desc: "Submit inquiries and book meetings with regulated fund managers directly through the platform. No middlemen, no runaround."
+      desc: "Submit inquiries and book meetings with regulated fund managers directly through the platform."
     }
   ];
 

@@ -160,7 +160,41 @@ const FadeIn = ({ children, delay = 0, className = "", immediate = false, ...pro
 );
 
 const EOSCalculator = () => {
-  const [mode, setMode] = useState<'employee' | 'employer'>('employee');
+  const [mode, setMode] = useState<'employee' | 'employer'>('employer');
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+
+  const handleUnlock = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!valid) { setEmailError('Please enter a valid work email'); return; }
+    setIsUnlocked(true);
+  };
+
+  const emailGate = !isUnlocked && (
+    <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-vestora-white/75 dark:bg-[#0B120E]/75 backdrop-blur-sm z-10">
+      <div className="text-center px-6 w-full max-w-xs">
+        <div className="w-10 h-10 rounded-full bg-vestora-forest/10 dark:bg-vestora-growth/10 flex items-center justify-center mx-auto mb-4">
+          <Lock className="w-5 h-5 text-vestora-forest dark:text-vestora-growth" />
+        </div>
+        <p className="text-sm font-semibold text-vestora-charcoal dark:text-vestora-neutral mb-1">Enter your work email to unlock results</p>
+        <p className="text-xs text-vestora-sage mb-4">Free. No spam.</p>
+        <form onSubmit={handleUnlock} className="space-y-3">
+          <input
+            type="email"
+            placeholder="you@company.com"
+            value={email}
+            onChange={e => { setEmail(e.target.value); setEmailError(''); }}
+            className="w-full px-4 py-2.5 rounded-xl border border-vestora-sage/30 bg-vestora-white dark:bg-[#15201A] text-vestora-charcoal dark:text-vestora-neutral text-sm focus:outline-none focus:border-vestora-forest dark:focus:border-vestora-growth"
+          />
+          {emailError && <p className="text-xs text-red-500 text-left">{emailError}</p>}
+          <Button variant="primary" className="w-full justify-center">Reveal My Results</Button>
+        </form>
+      </div>
+    </div>
+  );
+
   const [empSalary, setEmpSalary] = useState(15000);
   const [empYears, setEmpYears] = useState(4);
   const [empMonths, setEmpMonths] = useState(0);
@@ -220,7 +254,7 @@ const EOSCalculator = () => {
               EOS Liability Calculator
             </div>
             <h2 className="text-3xl md:text-5xl font-bold text-vestora-charcoal dark:text-vestora-neutral tracking-tight mb-4">
-              See What You're Owed — or What You Owe.
+              See What You Owe— or What You're Owed.
             </h2>
             <p className="text-lg text-vestora-charcoal/70 dark:text-vestora-neutral/70 max-w-2xl mx-auto">
               Calculate end-of-service benefits using the UAE Labour Law formula. Free, instant, no signup required.
@@ -230,7 +264,7 @@ const EOSCalculator = () => {
 
         <FadeIn delay={0.1} className="flex justify-center mb-10">
           <div className="inline-flex rounded-xl border border-vestora-sage/30 bg-vestora-white dark:bg-[#0B120E] p-1 gap-1">
-            {(['employee', 'employer'] as const).map(m => (
+            {(['employer', 'employee'] as const).map(m => (
               <button
                 key={m}
                 onClick={() => setMode(m)}
@@ -316,12 +350,13 @@ const EOSCalculator = () => {
                     </p>
                   </div>
                 ) : (
+                  <div className="relative">
                   <motion.div
                     key={`${empSalary}-${totalMonths}-${selectedFund}`}
                     initial={{ opacity: 0.6, scale: 0.99 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.25 }}
-                    className={resultCard}
+                    className={`${resultCard} ${!isUnlocked ? 'blur-sm pointer-events-none select-none' : ''}`}
                   >
                     <div className="grid grid-cols-2 gap-4 mb-6">
                       <div className={metricSecondary}>
@@ -362,6 +397,8 @@ const EOSCalculator = () => {
                       Get Your Full Breakdown
                     </Button>
                   </motion.div>
+                  {emailGate}
+                  </div>
                 )}
               </div>
             ) : (
@@ -428,12 +465,13 @@ const EOSCalculator = () => {
                   </div>
                 </div>
 
+                <div className="relative">
                 <motion.div
                   key={`${empBasis}-${avgSalary}-${numEmployees}-${totalSalaryBill}-${avgTenure}`}
                   initial={{ opacity: 0.6, scale: 0.99 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.25 }}
-                  className={resultCard}
+                  className={`${resultCard} ${!isUnlocked ? 'blur-sm pointer-events-none select-none' : ''}`}
                 >
                   <div className="grid grid-cols-2 gap-4 mb-6">
                     <div className={`${metricPrimary} col-span-2 sm:col-span-1`}>
@@ -477,6 +515,8 @@ const EOSCalculator = () => {
                     See Fund Options
                   </Button>
                 </motion.div>
+                {emailGate}
+                </div>
               </div>
             )}
           </motion.div>
@@ -502,32 +542,31 @@ const Hero = () => {
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
         <motion.div style={{ y: yText }} className="max-w-2xl">
           <FadeIn immediate>
-            <motion.div whileHover={{ scale: 1.05, x: 5 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-vestora-sage/15 text-vestora-forest text-xs font-semibold tracking-wide uppercase mb-6 border border-vestora-sage/20 cursor-default transition-colors hover:bg-vestora-sage/25">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-vestora-sage/15 text-vestora-forest text-xs font-semibold tracking-wide uppercase mb-6 border border-vestora-sage/20 cursor-default transition-colors hover:bg-vestora-sage/25">
               <span className="w-2 h-2 rounded-full bg-vestora-growth animate-pulse"></span>
               UAE EOS Investment Platform
-            </motion.div>
+            </div>
           </FadeIn>
           <FadeIn delay={0.1} immediate>
-            <motion.h1 whileHover={{ scale: 1.02, x: 5 }} className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-vestora-charcoal dark:text-vestora-neutral leading-[1.1] mb-6 origin-left cursor-default transition-colors">
-              Compare EOS <br/>
-              Investment <span className="text-vestora-forest dark:text-vestora-growth">Funds.</span> <br/>
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-vestora-charcoal dark:text-vestora-neutral leading-[1.1] mb-6">
+              Compare EOS <span className="text-vestora-forest dark:text-vestora-growth">Funds.</span><br/>
               Choose the Right One.
-            </motion.h1>
+            </h1>
           </FadeIn>
           <FadeIn delay={0.2} immediate>
-            <motion.p whileHover={{ scale: 1.02, x: 5 }} className="text-base sm:text-lg text-vestora-charcoal/70 dark:text-vestora-neutral/70 mb-10 leading-relaxed max-w-xl origin-left cursor-default transition-colors">
-              UAE Cabinet Resolution 96/2023 requires companies to invest employee end-of-service benefits in regulated funds. Vestora lets you calculate your liability, compare all SCA-approved funds side by side, and connect with fund managers - in one place.
-            </motion.p>
+            <p className="text-base sm:text-lg text-vestora-charcoal/70 dark:text-vestora-neutral/70 mb-10 leading-relaxed max-w-xl">
+              Evolving UAE regulations push companies to invest employee end-of-service benefits in regulated funds. Vestora lets you calculate your liability, compare all SCA-approved funds side by side, and connect with fund managers - in one place.
+            </p>
           </FadeIn>
           <FadeIn delay={0.3} immediate className="flex flex-col sm:flex-row gap-4">
-            <Button variant="primary" icon className="py-3 px-6 md:py-4 md:px-8 text-sm md:text-base" whileHover={{ scale: 1.05, x: 5 }} onClick={() => document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })}>Calculate Your EOS Liability - Free</Button>
-            <Button variant="outline" className="py-3 px-6 md:py-4 md:px-8 text-sm md:text-base bg-white/50 dark:bg-[#15201A]/50 backdrop-blur-sm" whileHover={{ scale: 1.05, x: 5 }} onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}>See How It Works</Button>
+            <Button variant="primary" icon className="py-3 px-6 md:py-4 md:px-8 text-sm md:text-base" onClick={() => document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })}>Calculate Your EOS Liability - Free</Button>
+            <Button variant="outline" className="py-3 px-6 md:py-4 md:px-8 text-sm md:text-base bg-white/50 dark:bg-[#15201A]/50 backdrop-blur-sm" onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}>See How It Works</Button>
           </FadeIn>
         </motion.div>
 
         <FadeIn delay={0.4} immediate className="relative lg:h-[600px] flex items-center justify-center">
           <motion.div style={{ y: yImage }} className="relative w-full max-w-lg">
-            <motion.div whileHover={{ scale: 1.02, y: -5 }} className="bg-vestora-white dark:bg-[#15201A] rounded-2xl shadow-vestora dark:shadow-none border border-vestora-sage/20 p-8 relative z-20 transition-colors duration-300">
+            <div className="bg-vestora-white dark:bg-[#15201A] rounded-2xl shadow-vestora dark:shadow-none border border-vestora-sage/20 p-8 relative z-20 transition-colors duration-300">
               <div className="flex justify-between items-start mb-8">
                 <div>
                   <p className="text-xs font-semibold text-vestora-sage uppercase tracking-wider mb-1">Current EOS Balance</p>
@@ -567,7 +606,7 @@ const Hero = () => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             <motion.div
               animate={{ y: [0, -8, 0], x: [0, 3, 0] }}

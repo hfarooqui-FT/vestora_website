@@ -770,7 +770,7 @@ const ValuePropositionV2 = () => {
       <FloatingParticles />
       <RippleBackground />
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="flex flex-col md:flex-row items-start justify-between gap-12 mb-16 md:mb-24">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-12 mb-16 md:mb-24">
           <FadeIn className="flex-1">
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-vestora-charcoal dark:text-vestora-neutral tracking-tight">
               Everything you need to make the right allocation

@@ -21,6 +21,100 @@ npm run dev                  # http://localhost:3000
 
 ---
 
+## Code Structure
+
+### Routes
+
+| Path | Component | Description |
+|------|-----------|-------------|
+| `/` | `src/App.tsx` | Primary landing page |
+| `/v2` | `src/LandingV2.tsx` | Alternate landing version |
+
+### Shared Components (`Assets /`)
+
+> The folder is named `Assets ` with a **trailing space**. All imports must include it: `import Navbar from '../Assets /Navbar'`.
+
+| File | Description |
+|------|-------------|
+| `Navbar.tsx` | Fixed top nav with scroll-aware background, dark mode toggle, mobile drawer, and "Get Early Access" CTA |
+| `Footer.tsx` | Site footer with platform, company, and legal link columns |
+
+### `src/App.tsx` — Page Sections
+
+The primary page is composed of self-contained section components rendered in this order:
+
+| Component | Section ID | Description |
+|-----------|-----------|-------------|
+| `Hero` | — | Parallax hero with headline, sub-copy, and CTA buttons |
+| `UrgencyBanner` | — | Full-width announcement strip |
+| `TrustBar` | — | Scrolling ticker of UAE company logos |
+| `EOSCalculator` | `#calculator` | Interactive EOSB calculator (see below) |
+| `ProblemSection` | — | Problem framing copy block |
+| `HowItWorks` | `#how-it-works` | Step-by-step process explanation |
+| `ValueProposition` | — | Feature/benefit grid |
+| `PlatformShowcase` | `#platform` | Product screenshots or mockups |
+| `SecuritySection` | `#security` | Trust and compliance messaging |
+| `CTA` | — | Bottom conversion section |
+
+### EOS Calculator (`EOSCalculator`)
+
+The calculator has two modes toggled by the user:
+
+**Employee mode** — inputs: monthly salary, years + months of tenure, fund selection. Outputs:
+- Statutory gratuity (`calcGratuity`) under UAE Labour Law Decree-Law No. 33 of 2021
+- Projected invested value (`calcInvestedEOSB`) if contributions are invested
+- Gain vs. statutory gratuity, with a bar chart projected over tenure
+
+**Employer mode** — inputs: average salary per employee or total monthly salary bill, number of employees, average tenure. Outputs:
+- Monthly and annual EOSB liability
+- 5-year projected fund value across Conservative / Balanced / Growth scenarios
+
+Both modes are **email-gated**: results are hidden behind an email capture form (`isUnlocked` state) until a valid address is submitted.
+
+**Financial formulas** (in `src/App.tsx`):
+
+```ts
+// UAE gratuity — 21 days/year for first 5 years, 30 days/year thereafter
+calcGratuity(monthlySalary, totalMonths)
+
+// Future value of monthly EOSB contributions compounded at annualRate
+calcInvestedEOSB(monthlySalary, totalMonths, annualRate)
+```
+
+Fund options and rates:
+
+| Fund | Annual Rate |
+|------|-------------|
+| Conservative | 8% |
+| Balanced | 10% |
+| Growth | 12% |
+
+### Design Tokens
+
+Tailwind CSS v4 custom colors defined as CSS variables in `src/index.css`:
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `vestora-forest` | `#0B422B` | Primary brand / buttons |
+| `vestora-growth` | `#56A861` | Dark mode primary / accents |
+| `vestora-sage` | `#8CA095` | Borders, muted text |
+| `vestora-charcoal` | `#1C2520` | Body text (light mode) |
+| `vestora-neutral` | `#F8FAF9` | Page background (light mode) |
+| `vestora-white` | `#FFFFFF` | Card backgrounds |
+
+Dark mode is toggled via `document.documentElement.classList` (no `prefers-color-scheme` — user-controlled only).
+
+### Animation
+
+All motion uses `motion/react` (Framer Motion v12). Reusable primitives in `src/App.tsx`:
+
+- `FadeIn` — wraps children in a fade-up entrance animation with configurable `delay`
+- `FloatingParticles` — decorative animated dots
+- `RippleBackground` — animated ring effect
+- `AbstractGradient` — blurred gradient blobs for hero backgrounds
+
+---
+
 ## GCP Infrastructure Setup
 
 Production runs on Google Cloud Run behind a Global HTTPS Load Balancer.

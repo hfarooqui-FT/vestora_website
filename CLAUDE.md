@@ -108,3 +108,18 @@ The build pipeline (`cloudbuild.yaml`):
 3. Deploys to Cloud Run
 
 **Note:** `COMMIT_SHA` must be passed as an explicit substitution when submitting manually — it is not auto-populated by `gcloud builds submit` (only by Cloud Build triggers).
+
+### Rollback
+
+Use `scripts/rollback.sh` to inspect or roll back the live Cloud Run revision.
+
+```bash
+scripts/rollback.sh status        # show revision serving 100% traffic
+scripts/rollback.sh list [N]      # list latest N revisions (default 10)
+scripts/rollback.sh prev          # shift 100% traffic to the revision just before current
+scripts/rollback.sh to <revision> # shift 100% traffic to a specific revision name
+scripts/rollback.sh pin           # pin 100% to current revision (blocks auto-promote)
+scripts/rollback.sh unpin         # restore auto-promote (latest revision = 100%)
+```
+
+Rollback is instant — Cloud Run keeps previous revisions and their images in Artifact Registry, so flipping traffic does not require a rebuild. `pin` is useful before risky changes: pinning the current revision means a subsequent deploy creates a new revision but does not receive traffic until `unpin` (or an explicit `to`) is run.
